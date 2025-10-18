@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Viewer</title>
+    <meta name="robots" content="noindex, nofollow"> 
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/fladm-1/games/refs/heads/main/assets/Gemini_Generated_Image_cm138cm138cm138c%20(1).png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ----------------------- */
+        /* Color Variables (Theme) */
+        /* ----------------------- */
+        :root {
+            /* Modern Dark Theme */
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --header-bg: #1e1e1e;
+            --primary-color: #f0870e; /* Orange Accent */
+            --primary-hover: #fff;
+            --card-bg: #1e1e1e;
+            --border-color: #333333;
+            --search-bg: #2d2d2d;
+            --section-title-color: #f0870e;
+            --icon-color: #03dac6;
+            --rating-color: #ffd700;
+            --android-color: #3ddc84;
+            --ios-color: #007aff;
+            --size-color: #03dac6;
+            --download-color: #f0870e;
+            --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            /* Unused colors in this simple version, but kept for reference: */
+            --active-tab-bg: rgba(187, 134, 252, 0.1); 
+            --detail-separator: rgba(255, 255, 255, 0.1); 
+            --highlight-color: #f0870e;
+            --success-color: #03dac6; 
+            --warning-color: #ffa500;
+            --error-color: #cf6679;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s;
+            padding-top: 80px; /* Space for fixed header */
+        }
+
+        /* ----------------------- */
+        /* Header & Search */
+        /* ----------------------- */
+        header {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            background-color: var(--header-bg);
+            padding: 15px 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 80px;
+        }
+
+        .logo img{
+            height: 50px;
+            
+        }
+
+        .search-container {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 20px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 45px 10px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 25px;
+            background-color: var(--search-bg);
+            color: var(--text-color);
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .search-input::placeholder {
+            color: #888;
+        }
+
+        .search-icon {
+            position: absolute;
+            top: 50%;
+            right: 28px; /* Icon on the left for LTR */
+            transform: translateY(-50%);
+            color: var(--primary-color);
+            cursor: pointer;
+            font-size: 18px;
+        }
+        
+        /* ----------------------- */
+        /* Grid and Content */
+        /* ----------------------- */
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            padding-top: 20px;
+        }
+        
+        .no-results {
+            text-align: center;
+            color: #888;
+            padding: 50px 0;
+            display: none;
+            grid-column: 1 / -1;
+            font-size: 1.1em;
+        }
+
+        /* ----------------------- */
+        /* Game Card */
+        /* ----------------------- */
+        .game-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .game-icon img {
+            width: 90px;
+            height: 90px;
+            border-radius: 18px;
+            object-fit: cover;
+            margin-bottom: 10px;
+            border: 3px solid var(--primary-color);
+        }
+
+        .game-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--text-color);
+            margin-bottom: 15px;
+            height: 45px;
+            overflow: hidden;
+        }
+        
+        .game-details {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 20px;
+            padding: 0 10px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 15px;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            flex: 1;
+        }
+
+        .detail-item:last-child {
+            align-items: flex-end;
+        }
+
+        .detail-label {
+            display: flex;
+            align-items: center;
+            color: #aaa;
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .detail-label i {
+            color: var(--icon-color);
+            margin-right: 5px;
+        }
+
+        .detail-value {
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--text-color);
+        }
+
+        .platforms-container {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            margin-top: 5px;
+        }
+
+        .platform-item {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            color: var(--text-color);
+            background-color: var(--search-bg);
+            padding: 3px 8px;
+            border-radius: 6px;
+        }
+
+        .platform-item i {
+            margin-right: 5px;
+        }
+        
+        .platform-item .fa-android { color: var(--android-color); }
+        .platform-item .fa-apple { color: var(--ios-color); }
+        .detail-item .fa-star { color: var(--rating-color); }
+        .detail-item .fa-file-arrow-down { color: var(--size-color); }
+
+
+        /* Download Link (Real URL) */
+        .download-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 90%;
+            padding: 10px;
+            background-color: var(--download-color);
+            color: var(--header-bg); 
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        .download-link:hover {
+            background-color: #ff9933; 
+            transform: translateY(-2px);
+        }
+
+        .download-link i {
+            margin-right: 8px;
+            color: var(--header-bg);
+        }
+
+        /* ----------------------- */
+        /* Mobile View */
+        /* ----------------------- */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                height: auto;
+                padding: 10px 15px;
+                position: static;
+                box-shadow: none;
+            }
+            .logo {
+                margin-bottom: 10px;
+            }
+            .search-container {
+                margin: 0;
+            }
+            body {
+                padding-top: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo"><img src="https://raw.githubusercontent.com/fladm-1/games/refs/heads/main/assets/Gemini_Generated_Image_cm138cm138cm138c%20(1).png" alt=""></div>
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-input" placeholder="Search for a game..." dir="ltr">
+            <i class="fas fa-search search-icon"></i>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="games-grid" id="gamesGrid">
+            <div class="no-results" style="display: none;">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p>Sorry, no matching results were found.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const gamesGrid = document.getElementById('gamesGrid');
+        const searchInput = document.getElementById('searchInput');
+        const noResultsElement = document.querySelector('.no-results');
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // 1. Load data from GD.json
+            loadGamesFromJSON();
+            
+            // 2. Attach search listeners
+            searchInput.addEventListener('input', performSearch);
+            document.querySelector('.search-icon').addEventListener('click', performSearch);
+        });
+        
+        // -----------------------
+        // JS Helper Functions
+        // -----------------------
+        
+        function createPlatformIcons(platforms) {
+            let html = '<div class="platforms-container">';
+            const platformMap = {
+                'Android': { icon: 'fab fa-android', name: 'Android' },
+                'iOS': { icon: 'fab fa-apple', name: 'iOS' }
+            };
+
+            platforms.forEach(platform => {
+                const platformData = platformMap[platform];
+                if (platformData) {
+                    html += `
+                        <div class="platform-item">
+                            <i class="${platformData.icon}"></i>
+                            <span>${platformData.name}</span>
+                        </div>
+                    `;
+                }
+            });
+            html += '</div>';
+            return html;
+        }
+
+        function createGameCardHTML(game) {
+            const platformsHtml = createPlatformIcons(game.platforms);
+            
+            // 💡 CRITICAL: Use 'real_url' for the direct download link
+            return `
+                <div class="game-card" 
+                    data-title="${game.title.toLowerCase()}"
+                    data-category="${game.category}" 
+                    data-size="${game.size}" 
+                    data-rating="${game.rating}">
+                    
+                    <div class="game-icon-container">
+                        <div class="game-icon">
+                            <img src="${game.icon_url}" alt="${game.title}">
+                        </div>
+                    </div>
+                    
+                    <div class="game-title">${game.title}</div>
+                    
+                    <div class="game-details">
+                        <div class="detail-item">
+                            <div class="detail-label">
+                                <span>Platforms:</span>
+                            </div>
+                            <div class="detail-value">
+                                ${platformsHtml}
+                            </div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">
+                                <i class="fa-solid fa-file-arrow-down"></i>
+                                <span>Size:</span>
+                            </div>
+                            <div class="detail-value">${game.size}</div>
+                            
+                            <div class="detail-label" style="margin-top: 8px;">
+                                <i class="fas fa-star"></i>
+                                <span>Rating:</span>
+                            </div>
+                            <div class="detail-value">${game.rating}</div>
+                        </div>
+                    </div>
+                    
+                    <a href="${game.real_url}" class="download-link" target="_blank" rel="noopener noreferrer">
+                        <i class="fas fa-download"></i> Download
+                    </a>
+                </div>
+            `;
+        }
+        
+        function renderGames(games) {
+            let cardsHtml = '';
+            games.forEach(game => {
+                cardsHtml += createGameCardHTML(game);
+            });
+            
+            // Clear previous content and append new cards (including the no-results div which is the only fixed child)
+            const noResultsDiv = gamesGrid.querySelector('.no-results');
+            gamesGrid.innerHTML = '';
+            gamesGrid.appendChild(noResultsDiv);
+            noResultsDiv.insertAdjacentHTML('afterend', cardsHtml);
+        }
+
+        // -----------------------
+        // Data and Search Logic
+        // -----------------------
+        
+        function loadGamesFromJSON() {
+            // Fetch the GD.json file from the same path
+            fetch('GD.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok or file not found.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data && Array.isArray(data.games)) {
+                        // Store the full dataset globally (or just render them)
+                        renderGames(data.games);
+                    } else {
+                        console.error("GD.json is missing the 'games' array or is empty.");
+                        noResultsElement.textContent = "Error: Invalid data structure in GD.json.";
+                        noResultsElement.style.display = 'block';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching or parsing GD.json:', error);
+                    noResultsElement.textContent = `Error loading games: ${error.message}.`;
+                    noResultsElement.style.display = 'block';
+                });
+        }
+
+        function performSearch() {
+            const searchTerm = searchInput.value.trim().toLowerCase();
+            let hasResults = false;
+            
+            // Select all game cards currently in the grid
+            const cards = gamesGrid.querySelectorAll('.game-card');
+
+            cards.forEach(card => {
+                // Read the pre-processed title from data-attribute
+                const title = card.dataset.title;
+                
+                if (title.includes(searchTerm)) {
+                    card.style.display = 'flex';
+                    hasResults = true;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // Show/hide no results message
+            if (!hasResults && searchTerm !== "") {
+                noResultsElement.style.display = 'block';
+            } else {
+                noResultsElement.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
